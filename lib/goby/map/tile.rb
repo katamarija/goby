@@ -38,7 +38,11 @@ module Goby
     #
     # @return [String] the string representation.
     def to_s
-      return @seen ? @graphic + " " : "  "
+      return @seen ? display_token : "  "
+    end
+
+    def display_token
+      @graphic + " "
     end
 
     attr_accessor :passable, :seen, :description, :events, :monsters, :graphic

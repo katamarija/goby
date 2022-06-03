@@ -12,6 +12,7 @@ module Goby
 
           help      Show the help menu
          map       Print the map
+         supermap       Print all the map
           inv         Check inventory
         status         Show player status
       use [item]      Use the specified item
@@ -72,6 +73,7 @@ module Goby
     # @param [String] command the player's entire command input.
     # @param [Player] player the player using the command.
     def interpret_command(command, player)
+      command = command.downcase
       return if command.eql?("quit")
 
       words = command.split()
@@ -113,23 +115,27 @@ module Goby
 
       # TODO: map command input to functions? Maybe this can
       #       also be done with the multiple-word commands?
-      if command.casecmp("w").zero?
+
+      case command
+      when "w"
         player.move_up; return
-      elsif command.casecmp("a").zero?
+      when "a"
         player.move_left; return
-      elsif command.casecmp("s").zero?
+      when "s"
         player.move_down; return
-      elsif command.casecmp("d").zero?
+      when "d"
         player.move_right; return
-      elsif command.casecmp("help").zero?
+      when "help"
         help(player); return
-      elsif command.casecmp("map").zero?
+      when "map"
         player.print_map; return
-      elsif command.casecmp("inv").zero?
+      when "supermap"
+        player.print_map(true); return
+      when "inv"
         player.print_inventory; return
-      elsif command.casecmp("status").zero?
+      when "status"
         player.print_status; return
-      elsif command.casecmp("save").zero?
+      when "save"
         save_game(player, "player.yaml"); return
       end
 

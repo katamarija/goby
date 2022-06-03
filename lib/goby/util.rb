@@ -10,6 +10,8 @@ module Goby
 
     # Syntactic sugar to create a couple using C[a, b]
     #
+    # [C[], C[]] === [C.new(1, 2), C.new(1, 2)]
+    #
     # @param [Object] first the first object in the pair.
     # @param [Object] second the second object in the pair.
     def self.[](first, second)

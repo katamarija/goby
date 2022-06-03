@@ -209,7 +209,7 @@ module Goby
 
     # Prints the map in regards to what the player has seen.
     # Additionally, provides current location and the map's name.
-    def print_map
+    def print_map(debug=false)
 
       # Provide some spacing from the edge of the terminal.
       3.times { print " " };
@@ -221,7 +221,7 @@ module Goby
         2.times { print " " }
 
         row.each_with_index do |tile, t|
-          print_tile(C[r, t])
+          print_tile(C[r, t], debug)
         end
         print "\n"
       end
@@ -236,7 +236,7 @@ module Goby
     end
 
     # Prints a minimap of nearby tiles (using VIEW_DISTANCE).
-    def print_minimap
+    def print_minimap(debug=false)
       print "\n"
       for y in (@location.coords.first-VIEW_DISTANCE)..(@location.coords.first+VIEW_DISTANCE)
         # skip to next line if out of bounds from above map
@@ -245,7 +245,7 @@ module Goby
         10.times { print " " }
         for x in (@location.coords.second-VIEW_DISTANCE)..(@location.coords.second+VIEW_DISTANCE)
           # Prevents operations on nonexistent tiles.
-          print_tile(C[y, x]) if (@location.map.in_bounds(y, x))
+          print_tile(C[y, x], debug) if (@location.map.in_bounds(y, x))
         end
         # new line if this row is not out of bounds
         print "\n" if y < @location.map.tiles.size
@@ -256,11 +256,12 @@ module Goby
     # Prints the tile based on the player's location.
     #
     # @param [C(Integer, Integer)] coords the y-x location of the tile.
-    def print_tile(coords)
+    def print_tile(coords, debug=false)
       if ((@location.coords.first == coords.first) && (@location.coords.second == coords.second))
         print "¶ "
       else
-        print @location.map.tiles[coords.first][coords.second].to_s
+        method = debug ? :display_token : :to_s
+        print @location.map.tiles[coords.first][coords.second].send(method)
       end
     end
 
